@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.calculate.ProMainEcnomicMapper">
+
+    <select id="getBydate" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery" resultType="com.zzsj.analysis.manage.entity.ProvinceMainEcnomicIndicators">
+        SELECT ID,SRBXH SORT,LB TYPE,BYWC CURR_MONTH_FINISHED,BYTB CURR_MONTH_YOY,LJWC TOTAL_FINISHED,LJZZ TOTAL_INCREASE,NF YEAR,YF MONTH
+        FROM T10_QSZYJJZB
+        WHERE NF=#{year} AND YF=#{month}
+    </select>
+
+</mapper>

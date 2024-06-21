@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.mysql.ReportTabMapper">
+
+    <!--查询结果表-->
+    <select id="getTabList" resultType="com.zzsj.analysis.manage.entity.CulRule">
+        SELECT * FROM CUL_RULE ORDER BY SORT ASC
+    </select>
+
+
+</mapper>

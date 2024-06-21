@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jh.mapper.GisServiceMapper">
+  <resultMap id="GisServiceResultMap" type="com.jh.domain.GisService">
+    <id column="id"                  property="id" />
+    <result column="name"            property="name" />
+    <result column="service_name"    property="serviceName" />
+    <result column="service_url"     property="serviceUrl" />
+    <result column="service_summary" property="serviceSummary" />
+    <result column="service_desc"    property="serviceDesc" />
+    <result column="service_tags"    property="serviceTags" />
+    <result column="create_user"     property="createUser" />
+    <result column="create_username" property="createUsername" />
+    <result column="create_time"     property="createTime" />
+    <result column="file_id"         property="sourceFile" />
+  </resultMap>
+  <sql id="selectGisServiceVo">
+    select id, name, service_name, service_url, service_summary, service_desc, service_tags, create_user, create_username, create_time
+    from gis_service
+  </sql>
+
+  <sql id="selectGisServiceFileVo">
+    select distinct(s.id), s.name, s.service_name, s.service_url, s.service_summary, s.service_desc, s.service_tags,
+           s.create_user, s.create_username, s.create_time, f.id as file_id
+    from gis_user_service us
+    left join gis_service s on s.id = us.service_id
+    left join gis_file f on f.service_id = s.id
+  </sql>
+
+  <insert id="insertGisService" parameterType="GisService" useGeneratedKeys="true" keyProperty="id">
+    insert into gis_service (
+      <if test="id != null and id != 0">id,</if>
+      <if test="name != null and name != ''">name,</if>
+      <if test="serviceName != null and serviceName != ''">service_name,</if>
+      <if test="serviceUrl != null and serviceUrl != ''">service_url,</if>
+      <if test="serviceSummary != null and serviceSummary != ''">service_summary,</if>
+      <if test="serviceDesc != null and serviceDesc != ''">service_desc,</if>
+      <if test="serviceTags != null and serviceTags != ''">service_tags,</if>
+      <if test="createUser != null and createUser != 0">create_user,</if>
+      <if test="createUsername != null and createUsername != ''">create_username,</if>
+      create_time
+    )
+    values (
+      <if test="id != null and id != 0">#{id},</if>
+      <if test="name != null and name != ''">#{name},</if>
+      <if test="serviceName != null and serviceName != ''">#{serviceName},</if>
+      <if test="serviceUrl != null and serviceUrl != ''">#{serviceUrl},</if>
+      <if test="serviceSummary != null and serviceSummary != ''">#{serviceSummary},</if>
+      <if test="serviceDesc != null and serviceDesc != ''">#{serviceDesc},</if>
+      <if test="serviceTags != null and serviceTags != ''">#{serviceTags},</if>
+      <if test="createUser != null and createUser != 0">#{createUser},</if>
+      <if test="createUsername != null and createUsername != ''">#{createUsername},</if>
+      now()
+    )
+  </insert>
+
+  <select id="selectGisServiceById" parameterType="Long" resultMap="GisServiceResultMap">
+    <include refid="selectGisServiceVo"/>
+    where id = #{id}
+  </select>
+
+  <select id="selectGisServiceByUserId" parameterType="Long" resultMap="GisServiceResultMap">
+    <include refid="selectGisServiceFileVo"/>
+    where us.user_id = #{userId}
+  </select>
+
+  <select id="selectMyGisServiceByUserId" parameterType="Long" resultMap="GisServiceResultMap">
+    select s.id, s.name, s.service_name, s.service_url, s.service_summary, s.service_desc, s.service_tags,
+           s.create_user, s.create_username, s.create_time, f.id as file_id
+    from gis_service s
+    left join gis_file f on f.service_id = s.id
+    where s.create_user = #{userId}
+  </select>
+
+  <select id="selectOtherGisServiceByUserId" parameterType="Long" resultMap="GisServiceResultMap">
+    <include refid="selectGisServiceFileVo"/>
+    where us.user_id = #{userId} and <![CDATA[ s.create_user <> #{userId} ]]>
+  </select>
+
+  <delete id="deleteGisServiceByID" parameterType="Long" >
+    delete from gis_service where id=#{id}
+  </delete>
+
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.mysql.ResultInsertMapper">
+    <!--全省公路水路行业安全生产事故表-->
+    <insert id="insertProTraIncd" parameterType="com.zzsj.analysis.manage.entity.ProvinceTrafficIncident">
+        insert into PROVINCE_TRAFFIC_INCIDENT(ID, SORT, TYPE,
+        TOTAL_INCIDENT, TOTAL_DIED, ROAD_TRANSPORT_INCIDENT,
+        ROAD_TRANSPORT_DIED, WATERAGE_INCIDENT, WATERAGE_DIED,
+        TRAFFIC_CONS_INCIDENT, TRAFFIC_CONS_DIED, YEAR,
+        MONTH)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}, #{item.type,jdbcType=VARCHAR},
+            #{item.totalIncident,jdbcType=INTEGER}, #{item.totalDied,jdbcType=INTEGER},
+            #{item.roadTransportIncident,jdbcType=INTEGER},
+            #{item.roadTransportDied,jdbcType=INTEGER}, #{item.waterageIncident,jdbcType=INTEGER},
+            #{item.waterageDied,jdbcType=INTEGER},
+            #{item.trafficConsIncident,jdbcType=INTEGER}, #{item.trafficConsDied,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <!--全国公路客货运输量统计-->
+    <insert id="insertNatnTrafStatics" parameterType="com.zzsj.analysis.manage.entity.NationalHighwayTrafficStatistics">
+        insert into NATIONAL_HIGHWAY_TRAFFIC_STATISTICS (ID, REGION, SORT,
+        PROVINCE, TOUR_WEEK_TRANS_CPLETD_NUM, TOUR_WEEK_TRANS_YEAR_GROWTH,
+        TOUR_WEEK_TRANS_RANKING, GOODS_WEEK_TRANS_CPLETD_NUM,
+        GOODS_WEEK_TRANS_YEAR_GROWTH, GOODS_WEEK_TRANS_RANKING,
+        YEAR, MONTH
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.region,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER},
+            #{item.province,jdbcType=VARCHAR}, #{item.tourWeekTransCpletdNum,jdbcType=INTEGER},
+            #{item.tourWeekTransYearGrowth,jdbcType=VARCHAR},
+            #{item.tourWeekTransRanking,jdbcType=INTEGER}, #{item.goodsWeekTransCpletdNum,jdbcType=INTEGER},
+            #{item.goodsWeekTransYearGrowth,jdbcType=VARCHAR}, #{item.goodsWeekTransRanking,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER}, #{item.month,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--全省公路网运行情况统计表-->
+    <insert id="insertProTraCdt" parameterType="com.zzsj.analysis.manage.entity.ProvinceHighwayTrafficCondition">
+        insert into PROVINCE_HIGHWAY_TRAFFIC_CONDITION (ID, SORT, PROJECT_NAME,
+        PROJECT_ILLUSTRATION1, PROJECT_ILLUSTRATION2,
+        UNIT, FINISHED_CONDITION, YEAR,
+        MONTH)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}, #{item.projectName,jdbcType=VARCHAR},
+            #{item.projectIllustration1,jdbcType=VARCHAR}, #{item.projectIllustration2,jdbcType=VARCHAR},
+            #{item.unit,jdbcType=VARCHAR}, #{item.finishedCondition,jdbcType=VARCHAR}, #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <!--全省主要经济指标-->
+    <insert id="insertProMainEcnomic" parameterType="com.zzsj.analysis.manage.entity.ProvinceMainEcnomicIndicators">
+        insert into PROVINCE_MAIN_ECNOMIC_INDICATORS (ID, SORT, TYPE,
+        CURR_MONTH_FINISHED, CURR_MONTH_YOY, TOTAL_FINISHED,
+        TOTAL_INCREASE, YEAR, MONTH)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}, #{item.type,jdbcType=VARCHAR},
+            #{item.currMonthFinished,jdbcType=VARCHAR}, #{item.currMonthYoy,jdbcType=VARCHAR},
+            #{item.totalFinished,jdbcType=VARCHAR},
+            #{item.totalIncrease,jdbcType=VARCHAR}, #{item.year,jdbcType=INTEGER}, #{item.month,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <!--全省综合交通建设投资完成情况-->
+    <insert id="insertProConsInvestComp"
+            parameterType="com.zzsj.analysis.manage.entity.ProvinceTransportationConstructionInvestment">
+        insert into PROVINCE_TRANSPORTATION_CONSTRUCTION_INVESTMENT (ID, SORT, QUOTA,
+        YEAR_TARGET, CURR_MONTH_FINISHED, TOTAL_FINISHED,
+        FINISHED_PERCENT, CURR_MONTH_MOM, YOY_GROWTH_RATE,
+        YEAR, MONTH
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}, #{item.quota,jdbcType=VARCHAR},
+            #{item.yearTarget,jdbcType=DECIMAL}, #{item.currMonthFinished,jdbcType=DECIMAL},
+            #{item.totalFinished,jdbcType=DECIMAL},
+            #{item.finishedPercent,jdbcType=VARCHAR}, #{item.currMonthMom,jdbcType=VARCHAR},
+            #{item.yoyGrowthRate,jdbcType=VARCHAR},
+            #{item.year,jdbcType=INTEGER}, #{item.month,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--五区投资完成指标-->
+    <insert id="insertDistrInvestComp"
+            parameterType="com.zzsj.analysis.manage.entity.FiveDistrictsInvestmentCompletionIndex">
+        insert into FIVE_DISTRICTS_INVESTMENT_COMPLETION_INDEX (ID, SORT, REGION,
+        YEAR_TARGET, CURR_MONTH_FINISHED, TOTAL_FINISHED,
+        FINISHED_PERCENT, MOM_GROWTH_RATE, YOY_GROWTH_RATE,
+        CONTRIBUTION_RATE, HIGHWAY_YEAR_GOAL, HIGHWAY_CURR_MONTH_FINISHED,
+        HIGHWAY_TOTAL_FINISHED, HIGHWAY_PERCENTAGE,
+        HIGHWAY_MOM, HIGHWAY_YOY, NP_HIGHWAY_YEAR_GOAL,
+        NP_HIGHWAY_CURR_MONTH_FINISHED, NP_HIGHWAY_TOTAL_FINISHED,
+        NP_HIGHWAY_PERCENT, NP_HIGHWAY_MOM, NP_HIGHWAY_YOY,
+        RURAL_ROAD_YEAR_GOAL, RURAL_ROAD_CURR_MONTH_FINISHED,
+        RURAL_ROAD_TOTAL_FINISHED, RURAL_ROAD_PERCENT,
+        RURAL_ROAD_MOM, RURAL_ROAD_YOY, INLAND_WATERWAY_YEAR_GOAL,
+        INLAND_WATERWAY_CURR_MONTH_FINISHED, INLAND_WATERWAY_TOTAL_FINISHED,
+        INLAND_WATERWAY_PERCENT, INLAND_WATERWAY_MOM,
+        INLAND_WATERWAY_YOY, SITE_CONSTUCTION_YEAR_GOAL,
+        SITE_CONSTUCTION_CURR_MONTH_FINISHED, SITE_CONSTUCTION_TOTAL_FINISHED,
+        SITE_CONSTUCTION_PERCENT, SITE_CONSTUCTION_MOM,
+        SITE_CONSTUCTION_YOY, CONSERVATION_YEAR_GOAL,
+        CONSERVATION_CURR_MONTH_FINISHED, CONSERVATION_TOTAL_FINISHED,
+        CONSERVATION_OTHERS, CONSERVATION_ORDINARY_HIGHWAY,
+        CONSERVATION_HIGHWAY, CONSERVATION_INTELLIGENT_TRANSPORT,
+        CONSERVATION_PERCENT, CONSERVATION_MOM, CONSERVATION_YOY,
+        YEAR, MONTH
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}, #{item.region,jdbcType=VARCHAR},
+            #{item.yearTarget,jdbcType=DECIMAL}, #{item.currMonthFinished,jdbcType=DECIMAL},
+            #{item.totalFinished,jdbcType=DECIMAL},
+            #{item.finishedPercent,jdbcType=VARCHAR}, #{item.momGrowthRate,jdbcType=VARCHAR},
+            #{item.yoyGrowthRate,jdbcType=VARCHAR},
+            #{item.contributionRate,jdbcType=VARCHAR}, #{item.highwayYearGoal,jdbcType=DECIMAL},
+            #{item.highwayCurrMonthFinished,jdbcType=DECIMAL},
+            #{item.highwayTotalFinished,jdbcType=DECIMAL}, #{item.highwayPercentage,jdbcType=VARCHAR},
+            #{item.highwayMom,jdbcType=VARCHAR}, #{item.highwayYoy,jdbcType=VARCHAR},
+            #{item.npHighwayYearGoal,jdbcType=DECIMAL},
+            #{item.npHighwayCurrMonthFinished,jdbcType=DECIMAL}, #{item.npHighwayTotalFinished,jdbcType=DECIMAL},
+            #{item.npHighwayPercent,jdbcType=VARCHAR}, #{item.npHighwayMom,jdbcType=VARCHAR},
+            #{item.npHighwayYoy,jdbcType=VARCHAR},
+            #{item.ruralRoadYearGoal,jdbcType=DECIMAL}, #{item.ruralRoadCurrMonthFinished,jdbcType=DECIMAL},
+            #{item.ruralRoadTotalFinished,jdbcType=DECIMAL}, #{item.ruralRoadPercent,jdbcType=VARCHAR},
+            #{item.ruralRoadMom,jdbcType=VARCHAR}, #{item.ruralRoadYoy,jdbcType=VARCHAR},
+            #{item.inlandWaterwayYearGoal,jdbcType=DECIMAL},
+            #{item.inlandWaterwayCurrMonthFinished,jdbcType=DECIMAL},
+            #{item.inlandWaterwayTotalFinished,jdbcType=DECIMAL},
+            #{item.inlandWaterwayPercent,jdbcType=VARCHAR}, #{item.inlandWaterwayMom,jdbcType=VARCHAR},
+            #{item.inlandWaterwayYoy,jdbcType=VARCHAR}, #{item.siteConstuctionYearGoal,jdbcType=DECIMAL},
+            #{item.siteConstuctionCurrMonthFinished,jdbcType=DECIMAL},
+            #{item.siteConstuctionTotalFinished,jdbcType=DECIMAL},
+            #{item.siteConstuctionPercent,jdbcType=VARCHAR}, #{item.siteConstuctionMom,jdbcType=VARCHAR},
+            #{item.siteConstuctionYoy,jdbcType=VARCHAR}, #{item.conservationYearGoal,jdbcType=DECIMAL},
+            #{item.conservationCurrMonthFinished,jdbcType=DECIMAL}, #{item.conservationTotalFinished,jdbcType=DECIMAL},
+            #{item.conservationOthers,jdbcType=DECIMAL}, #{item.conservationOrdinaryHighway,jdbcType=DECIMAL},
+            #{item.conservationHighway,jdbcType=DECIMAL}, #{item.conservationIntelligentTransport,jdbcType=DECIMAL},
+            #{item.conservationPercent,jdbcType=VARCHAR}, #{item.conservationMom,jdbcType=VARCHAR},
+            #{item.conservationYoy,jdbcType=VARCHAR},
+            #{item.year,jdbcType=INTEGER}, #{item.month,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--各市（州）公路水路建设投资完成情况-->
+    <insert id="insertCityConsInvestComp"
+            parameterType="com.zzsj.analysis.manage.entity.CityWayConstructionInvestmentCompletion">
+        insert into CITY_WAY_CONSTRUCTION_INVESTMENT_COMPLETION (ID, SORT, CITY,
+        TOTAL_ANNUAL_PLAN, TOTAL_CURR_MONTH_FINISHED,
+        TOTAL_FINISHED, TOTAL_COMPLETION_RATE, TOTAL_COMPLETION_RATE_RANKING,
+        TOTAL_MONTH_RANKING_CAHNGE, FINISHED_INVESTMENT_HIGHWAY,
+        FINISHED_INVESTMENT_NP_HIGHWAY, FINISHED_INVESTMENT_RURAL_ROAD,
+        FINISHED_INVESTMENT_INLAND_WATERWAY, FINISHED_INVESTMENT_SITE_CONSTUCTION,
+        FINISHED_INVESTMENT_CONSERVATION, YEAR, MONTH)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}, #{item.city,jdbcType=VARCHAR},
+            #{item.totalAnnualPlan,jdbcType=DECIMAL}, #{item.totalCurrMonthFinished,jdbcType=DECIMAL},
+            #{item.totalFinished,jdbcType=DECIMAL}, #{item.totalCompletionRate,jdbcType=VARCHAR},
+            #{item.totalCompletionRateRanking,jdbcType=INTEGER},
+            #{item.totalMonthRankingCahnge,jdbcType=VARCHAR}, #{item.finishedInvestmentHighway,jdbcType=DECIMAL},
+            #{item.finishedInvestmentNpHighway,jdbcType=DECIMAL}, #{item.finishedInvestmentRuralRoad,jdbcType=DECIMAL},
+            #{item.finishedInvestmentInlandWaterway,jdbcType=DECIMAL},
+            #{item.finishedInvestmentSiteConstuction,jdbcType=DECIMAL},
+            #{item.finishedInvestmentConservation,jdbcType=DECIMAL}, #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <!--全国公路水路固定资产投资完成情况-->
+    <insert id="insertProInvestData"
+            parameterType="com.zzsj.analysis.manage.entity.NationalHighwayWaterwayInvestmentCompletion">
+        insert into NATIONAL_HIGHWAY_WATERWAY_INVESTMENT_COMPLETION (ID, SORT, RANKING,
+        PROVINCE, DIVISION_TARGET, PROVINCE_TARGET,
+        TOTAL_FINISHED, FINISHED_PERCENT, CURR_MONTH_MOM,
+        YOY_GROWTH_RATE, YEAR, MONTH)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}, #{item.ranking,jdbcType=INTEGER},
+            #{item.province,jdbcType=VARCHAR}, #{item.divisionTarget,jdbcType=DECIMAL},
+            #{item.provinceTarget,jdbcType=DECIMAL},
+            #{item.totalFinished,jdbcType=DECIMAL}, #{item.finishedPercent,jdbcType=VARCHAR},
+            #{item.currMonthMom,jdbcType=VARCHAR},
+            #{item.yoyGrowthRate,jdbcType=VARCHAR}, #{item.year,jdbcType=INTEGER}, #{item.month,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+</mapper>
+

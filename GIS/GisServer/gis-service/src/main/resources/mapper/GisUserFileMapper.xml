@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jh.mapper.GisUserFileMapper">
+  <resultMap id="GisUserFileResultMap" type="GisUserFile">
+    <result column="user_id" property="userId" />
+    <result column="file_id" property="fileId" />
+  </resultMap>
+  <insert id="insertGisUserFile" parameterType="GisUserFile">
+    insert into gis_user_file (user_id, file_id)
+    values (#{userId}, #{fileId})
+  </insert>
+  <delete id="deleteGisUserFile" parameterType="GisUserFile">
+    delete from gis_user_file where user_id=#{userId} and file_id=#{fileId}
+  </delete>
+  <delete id="deleteGisUserFileByFileID" parameterType="Long">
+    delete from gis_user_file where file_id=#{file_id}
+  </delete>
+  <insert id="batchInsertGisUserFile" parameterType="java.util.List">
+    insert into gis_user_file (user_id, file_id) values
+    <foreach item="item" index="index" collection="list" separator=",">
+      (#{item.userId}, #{item.fileId})
+    </foreach>
+  </insert>
+</mapper>

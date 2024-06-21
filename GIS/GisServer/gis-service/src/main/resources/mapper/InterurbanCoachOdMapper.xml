@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jh.mapper.InterurbanCoachOdMapper">
+  <resultMap id="BaseResultMap" type="com.jh.domain.InterurbanCoachOd">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="O_CITY" jdbcType="VARCHAR" property="oCity" />
+    <result column="D_CITY" jdbcType="VARCHAR" property="dCity" />
+    <result column="NUM" jdbcType="INTEGER" property="num" />
+    <result column="DATE_TIME" jdbcType="INTEGER" property="dateTime" />
+    <result column="O_CITY_LON" jdbcType="DECIMAL" property="oCityLon" />
+    <result column="O_CITY_LAT" jdbcType="DECIMAL" property="oCityLat" />
+    <result column="D_CITY_LON" jdbcType="DECIMAL" property="dCityLon" />
+    <result column="D_CITY_LAT" jdbcType="DECIMAL" property="dCityLat" />
+    <result column="SYNCHRONIZE_TIME" jdbcType="TIMESTAMP" property="synchronizeTime" />
+  </resultMap>
+  <select id="selectInterurbanCoachOdStatisticsList" resultMap="BaseResultMap">
+    select
+    O_CITY, D_CITY, sum(NUM) as NUM, O_CITY_LON, O_CITY_LAT, D_CITY_LON, D_CITY_LAT
+    from INTERURBAN_COACH_OD
+    where O_CITY=#{ocity} and O_CITY &lt;&gt; D_CITY and DATE_TIME between #{start} AND #{end}
+    group by O_CITY, D_CITY,O_CITY_LON, O_CITY_LAT, D_CITY_LON, D_CITY_LAT
+    order by O_CITY, D_CITY,O_CITY_LON, O_CITY_LAT, D_CITY_LON, D_CITY_LAT
+  </select>
+</mapper>

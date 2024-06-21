@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.calculate.ProTrafficIncidentMapper">
+
+    <select id="getByDate" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery" resultType="com.zzsj.analysis.manage.entity.ProvinceTrafficIncident">
+        SELECT ROAD_TRANSPORT_INCIDENT,ROAD_TRANSPORT_DIED,WATERAGE_INCIDENT,WATERAGE_DIED,TRAFFIC_CONS_INCIDENT,TRAFFIC_CONS_DIED,
+        ROAD_TRANSPORT_INCIDENT+WATERAGE_INCIDENT+TRAFFIC_CONS_INCIDENT TOTAL_INCIDENT,
+        ROAD_TRANSPORT_DIED+WATERAGE_DIED+TRAFFIC_CONS_DIED TOTAL_DIED FROM (
+        SELECT
+        SUM(DLYS_SGQS) ROAD_TRANSPORT_INCIDENT,
+        SUM(DLYS_SWRS) ROAD_TRANSPORT_DIED,
+        SUM(SSJT_SGQS) WATERAGE_INCIDENT,
+        SUM(SSJT_SWRS) WATERAGE_DIED,
+        SUM(JTJS_SGQS) TRAFFIC_CONS_INCIDENT,
+        SUM(JTJS_SWRS) TRAFFIC_CONS_DIED
+        FROM T10_QSJTYSAQSCSGTJB
+        GROUP BY NF
+        <if test="month != 0">
+            ,YF
+        </if>
+        HAVING
+        NF=#{year}
+        <if test="month != 0">
+            and YF=#{month}
+        </if>)
+    </select>
+
+    <!--判断是否有重复数据-->
+    <select id="getCountNum" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery" resultType="java.lang.Integer">
+        SELECT count(1) NUM
+        FROM T10_QSJTYSAQSCSGTJB
+        WHERE
+        NF=#{year}
+        <if test="month != 0">
+            and YF=#{month}
+        </if>)
+    </select>
+</mapper>

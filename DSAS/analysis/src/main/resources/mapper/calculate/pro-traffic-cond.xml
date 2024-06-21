@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.calculate.ProTrafficCondMapper">
+
+    <select id="getBydate" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery" resultType="com.zzsj.analysis.manage.entity.ProvinceHighwayTrafficCondition">
+        SELECT ID,SRBXH SORT,XM PROJECT_NAME,XM_YM1 PROJECT_ILLUSTRATION1,XM_YM2 PROJECT_ILLUSTRATION2,SW UNIT,WCQK FINISHED_CONDITION,NF YEAR,YF MONTH
+        FROM T10_QSGLWYXQKTJB
+        WHERE NF=#{year} AND YF=#{month}
+    </select>
+
+</mapper>

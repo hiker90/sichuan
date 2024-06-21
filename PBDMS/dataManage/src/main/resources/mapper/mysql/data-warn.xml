@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.DataWarnMapper">
+
+    <!--查询预警信息-->
+    <select id="getWarningStates" parameterType="com.zzsj.dm.manage.pojo.query.WarnTypeQuery"
+            resultType="com.zzsj.dm.manage.pojo.vo.DmWarningVo">
+        SELECT
+        STATUS,
+        NAME,
+        WARNING_TYPE,
+        MAX(UPDATE_TIME) UPDATE_TIME
+        FROM
+        DM_WARNING
+        <where>
+            <if test="status != null">
+                STATUS = #{status}
+            </if>
+            <if test="name != null">
+                AND NAME = #{name}
+            </if>
+        </where>
+        GROUP BY
+        STATUS,
+        NAME,
+        WARNING_TYPE
+        ORDER BY
+        UPDATE_TIME DESC
+    </select>
+
+    <!--查询处理情况-->
+    <select id="getprocessedWarning" parameterType="com.zzsj.dm.manage.pojo.query.WarnTypeQuery"
+            resultType="com.zzsj.dm.manage.pojo.vo.DmWarningVo">
+        SELECT
+        ID,
+        WARNING_STATE,
+        STATUS,
+        NAME,
+        WARNING_TYPE,
+        UPDATE_TIME
+        FROM
+        DM_WARNING
+        <where>
+            STATUS = 1
+            <if test="name != null">
+                AND NAME = #{name}
+            </if>
+        </where>
+        ORDER BY
+        UPDATE_TIME DESC
+    </select>
+
+    <!--查询预警具体信息-->
+    <select id="getWarningHistory" parameterType="com.zzsj.dm.manage.pojo.query.WarnTypeQuery"
+            resultType="com.zzsj.dm.manage.pojo.vo.DmWarningVo">
+        SELECT
+        ID,
+        WARNING_STATE,
+        STATUS,
+        NAME,
+        WARNING_TYPE,
+        UPDATE_TIME
+        FROM
+        DM_WARNING
+        <where>
+            (STATUS = 0 or STATUS=2)
+            <if test="name != null">
+                AND NAME = #{name}
+            </if>
+        </where>
+        ORDER BY
+        UPDATE_TIME DESC
+    </select>
+
+    <!--处理预警-->
+    <update id="dealWarning" parameterType="java.lang.String">
+            UPDATE
+            DM_WARNING
+            SET
+            STATUS=1
+            <where>
+                <if test="name != null">
+                   NAME = #{name}
+                </if>
+            </where>
+    </update>
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.DataCheckMapper">
+
+    <!--数据对标列表-->
+    <select id="getCheckList" parameterType="com.zzsj.dm.manage.pojo.query.CheckQuery"
+            resultType="com.zzsj.dm.manage.pojo.vo.DmCheckMainVo">
+        SELECT
+        ID, NAME, TAB_CN_NAME, TAB_EN_NAME, COMMENT, STATUS,UPDATE_TIME
+        FROM
+        DATA_CHECK
+        WHERE
+        FLAG=0
+        <if test="status != null and status != ''">
+            AND STATUS=#{status}
+        </if>
+        ORDER BY
+        UPDATE_TIME DESC
+    </select>
+
+    <!--根据表ID查询字段-->
+    <select id="getColList" parameterType="java.lang.String" resultType="com.zzsj.dm.manage.pojo.vo.DmCheckDetailVo">
+        SELECT
+          ID, CHECK_MAIN_ID, RULE, COL_EN_NAME, COL_CN_NAME, SORT
+        FROM
+          DATA_CHECK_DETAIL
+        WHERE
+          CHECK_MAIN_ID = #{id} AND FLAG=0
+        ORDER BY
+          SORT ASC
+    </select>
+
+    <!--插入对标主表-->
+    <insert id="insertData" parameterType="com.zzsj.dm.manage.pojo.vo.DmCheckMainVo">
+        INSERT INTO
+          DATA_CHECK(ID, NAME, TAB_CN_NAME,TAB_EN_NAME, COMMENT)
+        values
+          (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{tabCnName,jdbcType=VARCHAR},
+          #{tabEnName,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR})
+    </insert>
+
+    <!--插入对标字段表-->
+    <insert id="insertColList" parameterType="com.zzsj.dm.manage.pojo.vo.DmCheckDetailVo">
+        insert into
+        DATA_CHECK_DETAIL (ID, CHECK_MAIN_ID, RULE, COL_EN_NAME, COL_CN_NAME, SORT)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.checkMainId,jdbcType=VARCHAR}, #{item.rule,jdbcType=VARCHAR},
+            #{item.colEnName,jdbcType=VARCHAR}, #{item.colCnName,jdbcType=VARCHAR}, #{item.sort,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <!--根据ID删除主表数据-->
+    <update id="deleteById">
+       UPDATE
+        DATA_CHECK
+       SET
+        FLAG = 1
+       WHERE
+        ID = #{id}
+    </update>
+
+    <!--根据ID删除字段表数据-->
+    <update id="deleColByid">
+        DELETE FROM
+        DATA_CHECK_DETAIL
+        WHERE
+        CHECK_MAIN_ID = #{id}
+    </update>
+
+    <!--查询列ID集合-->
+    <select id="getIdsById" resultType="java.lang.String">
+        SELECT
+          ID
+        FROM
+          DATA_CHECK_DETAIL
+        WHERE
+          CHECK_MAIN_ID = #{id} AND FLAG=0
+    </select>
+
+    <!--更新主表-->
+    <update id="updateMain" parameterType="com.zzsj.dm.manage.pojo.vo.DmCheckMainVo">
+        update DATA_CHECK
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="tabCnName != null">
+                TAB_CN_NAME = #{tabCnName,jdbcType=VARCHAR},
+            </if>
+            <if test="tabEnName != null">
+                TAB_EN_NAME = #{tabEnName,jdbcType=VARCHAR},
+            </if>
+            <if test="comment != null">
+                COMMENT = #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--修改预警状态-->
+    <update id="changeStatus" parameterType="com.zzsj.dm.manage.pojo.query.StatusQuery">
+      UPDATE
+        DATA_CHECK
+      SET
+        STATUS=#{status}
+      WHERE
+        ID=#{id}
+    </update>
+
+</mapper>

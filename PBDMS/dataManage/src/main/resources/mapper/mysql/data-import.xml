@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.DataImportMapper">
+    <!--插入日志信息-->
+    <insert id="newLog" parameterType="com.zzsj.dm.manage.pojo.vo.ImportLogVo">
+        insert into IMPORT_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="totalNum != null">
+                TOTAL_NUM,
+            </if>
+            <if test="successNum != null">
+                SUCCESS_NUM,
+            </if>
+            <if test="failNum != null">
+                FAIL_NUM,
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME,
+            </if>
+            <if test="tableId != null">
+                TABLE_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="totalNum != null">
+                #{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="successNum != null">
+                #{successNum,jdbcType=INTEGER},
+            </if>
+            <if test="failNum != null">
+                #{failNum,jdbcType=INTEGER},
+            </if>
+            <if test="tableName != null">
+                #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableId != null">
+                #{tableId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新日志-->
+    <update id="updateLog" parameterType="com.zzsj.dm.manage.pojo.vo.ImportLogVo">
+        update IMPORT_LOG
+        <set>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="totalNum != null">
+                TOTAL_NUM = #{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="successNum != null">
+                SUCCESS_NUM = #{successNum,jdbcType=INTEGER},
+            </if>
+            <if test="failNum != null">
+                FAIL_NUM = #{failNum,jdbcType=INTEGER},
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--插入错误信息-->
+    <insert id="insertWrongMes" parameterType="com.zzsj.dm.manage.pojo.vo.WrongSqlVo">
+        insert into WRONG_MESSAGE(ID,LOG_ID,EXCEPTION_MESSAGE,DATA)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+         (#{item.id,jdbcType=VARCHAR},#{item.logId,jdbcType=VARCHAR},#{item.exceptionMessage,jdbcType=VARCHAR},#{item.data,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+        <!--查询导入日志-->
+    <select id="getImpLog" resultType="com.zzsj.dm.manage.pojo.vo.ImportLogVo">
+        SELECT ID, STATUS, TOTAL_NUM, SUCCESS_NUM, FAIL_NUM, TABLE_NAME, CREATE_TIME, UPDATE_TIME
+        FROM IMPORT_LOG WHERE FLAG=0
+        <if test="status != null and status != ''">
+            AND STATUS=#{status}
+        </if>
+        ORDER BY UPDATE_TIME DESC
+    </select>
+
+        <!--更新处理状态-->
+    <update id="changeStatus" parameterType="com.zzsj.dm.manage.pojo.query.StatusQuery">
+          UPDATE IMPORT_LOG SET STATUS=#{status} WHERE ID=#{id}
+     </update>
+
+    <!--查询错误信息-->
+    <select id="getWrongMes" parameterType="java.lang.String" resultType="com.zzsj.dm.manage.pojo.vo.WrongSqlVo">
+      SELECT ID,LOG_ID,EXCEPTION_MESSAGE,DATA FROM WRONG_MESSAGE WHERE LOG_ID=#{id}
+    </select>
+
+    <!--根据日志ID查询表ID-->
+    <select id="getTabIdById" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT TABLE_ID FROM IMPORT_LOG WHERE ID=#{id}
+    </select>
+</mapper>
+

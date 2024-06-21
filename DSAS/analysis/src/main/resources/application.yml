@@ -1,0 +1,41 @@
+server:
+  port: 8252
+
+spring:
+  profiles:
+   active: dev
+  aop:
+    proxy-target-class: true
+    auto: true
+
+  messages:
+    encoding: utf-8
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+
+#mybatis plus 设置
+mybatis-plus:
+  type-aliases-package: com.zzjs.analysis.manage.entity
+  mapper-locations: classpath:mapper/*/*.xml
+  configuration:
+    jdbc-type-for-null: null
+  global-config:
+    # 关闭 mybatis-plus的 banner
+    banner: false
+  type-handlers-package: com.zzsj.analysis.base.handler
+pagehelper:
+#  helperDialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: count=countSql
+# 默认false,当为true时，自动检验适合的数据库
+  auto-dialect: true
+# 这个一定要加上，不然mysql和oracle分页两个只能用一个，另一个会报错，加上后，两中数据库分页都可以用了
+  auto-runtime-dialect: true
+#设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是Page类型）
+  page-size-zero: true

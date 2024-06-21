@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.DataTabOprateMapper">
+
+    <!--查询自定义表集合-->
+    <select id="getList" resultType="com.zzsj.dm.manage.pojo.vo.TabListVo">
+        SELECT
+          ID, TABLE_CN_NAME, TABLE_EN_NAME
+        FROM  TAB_LIST
+        WHERE
+          FLAG=0
+    </select>
+
+    <!--删除列集合表-->
+    <delete id="delColById" parameterType="java.lang.String">
+      DELETE FROM COL_LIST WHERE TABLE_ID=#{id}
+    </delete>
+
+    <!--删除表集合对应数据-->
+    <delete id="delById" parameterType="java.lang.String">
+      DELETE FROM TAB_LIST WHERE ID=#{id}
+    </delete>
+
+    <!--插入列集合-->
+    <insert id="insertColList" parameterType="com.zzsj.dm.manage.pojo.vo.ColListVo">
+        insert into COL_LIST (ID, TABLE_ID, SORT,
+        COL_CN_NAME, COL_EN_NAME, DATA_TYPE,
+        LENGTH, DECIMAL_LENGTH, DATE_TYPE
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+         (#{item.id,jdbcType=VARCHAR}, #{item.tableId,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER},
+        #{item.colCnName,jdbcType=VARCHAR}, #{item.colEnName,jdbcType=VARCHAR}, #{item.dataType,jdbcType=VARCHAR},
+        #{item.length,jdbcType=INTEGER}, #{item.decimalLength,jdbcType=INTEGER}, #{item.dateType,jdbcType=VARCHAR}
+        )
+        </foreach>
+    </insert>
+
+    <!--插入表-->
+    <insert id="insert" parameterType="com.zzsj.dm.manage.pojo.vo.TabListVo">
+        insert into TAB_LIST
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="tableCnName != null">
+                TABLE_CN_NAME,
+            </if>
+            <if test="tableEnName != null">
+                TABLE_EN_NAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="tableCnName != null">
+                #{tableCnName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableEnName != null">
+                #{tableEnName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据表ID查询列集合-->
+    <select id="selectColsByTabId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT COL_EN_NAME FROM COL_LIST WHERE TABLE_ID=#{id} AND FLAG=0 ORDER BY SORT ASC
+    </select>
+
+    <!--查询可选列类型-->
+    <select id="getColTypes" resultType="com.zzsj.dm.manage.pojo.vo.ColTypesVo">
+        SELECT ID, DATA_TYPE, EX_LENGTH, EX_DECIMAL, MAX_LENGTH, MAX_DECIMAL, MIN_DECIMAL, COMMENTS,
+    FLAG, CREATE_TIME, UPDATE_TIME
+        FROM DATA_TYPE_DICTIONARY
+        WHERE FLAG=0
+    </select>
+
+    <!--根据ID查询列集合-->
+    <select id="getColList" parameterType="java.lang.String" resultType="com.zzsj.dm.manage.pojo.vo.ColListVo">
+        SELECT ID, TABLE_ID, SORT, COL_CN_NAME, COL_EN_NAME, DATA_TYPE, LENGTH, DECIMAL_LENGTH,DATE_TYPE
+        FROM COL_LIST WHERE TABLE_ID=#{id} AND FLAG=0 ORDER BY SORT ASC
+    </select>
+</mapper>
+

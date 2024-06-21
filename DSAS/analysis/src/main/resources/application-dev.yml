@@ -1,0 +1,50 @@
+# log config
+logging:
+  config: classpath:log/logback-dev.xml
+spring:
+  datasource:
+    dynamic:
+      # 是否开启 SQL日志输出，生产环境建议关闭，有性能损耗
+      p6spy: false
+      hikari:
+        connection-timeout: 30000
+        max-lifetime: 1800000
+        max-pool-size: 15
+        min-idle: 5
+#        connection-test-query: SELECT * from dual
+        pool-name: DmHikariCP
+      # 配置默认数据源
+      primary: analysis
+      datasource:
+        # 数据源-1，名称为 primary
+         oracle:
+           username: sctsp
+           password: JdYS_3s97B
+           driver-class-name: oracle.jdbc.OracleDriver
+           url: jdbc:oracle:thin:@//10.25.171.24:1521/ORCLPDB1
+         # mysql数据源
+         analysis:
+           username: root
+           password: 123654
+           driver-class-name: com.mysql.jdbc.Driver
+           url: jdbc:mysql://10.25.171.24:13306/analysis?characterEncoding=utf-8&amp;useUnicode=true&amp;allowMultiQueries=true
+         # mysql数据源
+         dm:
+           username: root
+           password: 123654
+           driver-class-name: com.mysql.jdbc.Driver
+           url: jdbc:mysql://10.25.171.24:13306/dm?characterEncoding=utf-8&amp;useUnicode=true&amp;allowMultiQueries=true
+         dms:
+           username: dbuser
+           password: 123456
+           driver-class-name: com.mysql.jdbc.Driver
+           url: jdbc:mysql://10.25.171.247:3306/dms?characterEncoding=utf-8&amp;useUnicode=true&amp;allowMultiQueries=true
+  redis:
+    host: 10.25.171.24
+    port: 6379
+    max-wait: 30000 #连接池最大阻塞时间
+    max-active: 100 #连接池最大连接和数量
+    max-idle : 20 #连接池最大空闲连接
+    min-idle: 0 #连接处最小连接数量
+    timeout: 3000 #连接超时
+    password: 123456

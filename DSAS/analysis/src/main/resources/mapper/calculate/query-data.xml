@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.calculate.QueryDataMapper">
+
+    <!--全省交通固定资产完成投资-->
+    <select id="getFixInvest" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="java.math.BigDecimal">
+       SELECT SUM(TOTAL_FINISHED) TOTAL_FINISHED FROM FIVE_DISTRICTS_INVESTMENT_COMPLETION_INDEX WHERE YEAR=#{year} AND MONTH=#{month}
+    </select>
+
+    <!--养护及专项非固投完成投资-->
+    <select id="getTotalConservation" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="java.math.BigDecimal">
+        SELECT SUM(CONSERVATION_TOTAL_FINISHED) CONSERVATION_TOTAL_FINISHED FROM FIVE_DISTRICTS_INVESTMENT_COMPLETION_INDEX WHERE YEAR=#{year} AND MONTH=#{month}
+    </select>
+
+    <!--厅年度力争目标-->
+    <select id="getOfficeTarget" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="java.math.BigDecimal">
+      SELECT SUM(YEAR_TARGET) YEAR_TARGET FROM FIVE_DISTRICTS_INVESTMENT_COMPLETION_INDEX WHERE YEAR=#{year} AND MONTH=#{month}
+    </select>
+
+
+    <!--全省综合交通建设投资完成情况表-->
+    <select id="getProInvestOthersData" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.entity.ProvinceTransportationConstructionInvestment">
+        SELECT SORT,QUOTA,YEAR_TARGET,TOTAL_FINISHED,FINISHED_PERCENT,CURR_MONTH_MOM,YOY_GROWTH_RATE
+        FROM PROVINCE_TRANSPORTATION_CONSTRUCTION_INVESTMENT
+        WHERE YEAR=#{year} AND MONTH=#{month}
+    </select>
+
+    <select id="getConserData" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.entity.FiveDistrictsInvestmentCompletionIndex">
+      SELECT SUM(CONSERVATION_HIGHWAY) CONSERVATION_HIGHWAY,
+      SUM(CONSERVATION_ORDINARY_HIGHWAY) CONSERVATION_ORDINARY_HIGHWAY,
+      SUM(CONSERVATION_OTHERS) CONSERVATION_OTHERS,
+      SUM(CONSERVATION_INTELLIGENT_TRANSPORT) CONSERVATION_INTELLIGENT_TRANSPORT
+      FROM FIVE_DISTRICTS_INVESTMENT_COMPLETION_INDEX WHERE YEAR=#{year} AND MONTH=#{month}
+    </select>
+</mapper>

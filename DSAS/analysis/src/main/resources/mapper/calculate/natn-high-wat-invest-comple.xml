@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.calculate.NatnHigWatInvestCompleMapper">
+    <select id="getProInvestData"
+            resultType="com.zzsj.analysis.manage.entity.NationalHighwayWaterwayInvestmentCompletion"
+            parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery">
+     SELECT
+        SRBBH SORT,
+        rank() over(order by LJ desc) RANKING,
+        SF PROVINCE,
+        BXDMB DIVISION_TARGET,
+        SNKZMB PROVINCE_TARGET,
+        LJ TOTAL_FINISHED,
+        WCBL FINISHED_PERCENT,
+        HB CURR_MONTH_MOM,
+        TB YOY_GROWTH_RATE,
+        NF YEAR,
+        YF MONTH
+        FROM T10_QGZYSFGDZCTZWCSJ
+         WHERE
+            NF = #{year}
+            AND YF = #{month}
+    </select>
+</mapper>

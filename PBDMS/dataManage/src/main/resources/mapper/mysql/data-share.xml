@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.DataShareMapper">
+
+    <!--共享交换-申请-->
+    <insert id="dataApply" parameterType="com.zzsj.dm.manage.pojo.vo.DataShareApplyVo">
+        insert into DATA_SHARE_APPLY
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="applyUser != null">
+                APPLY_USER,
+            </if>
+            <if test="applyUnit != null">
+                APPLY_UNIT,
+            </if>
+            <if test="applyDate != null">
+                APPLY_DATE,
+            </if>
+            <if test="applyDataName != null">
+                APPLY_DATA_NAME,
+            </if>
+            <if test="applyStatus != null">
+                APPLY_STATUS,
+            </if>
+            <if test="checkDate != null">
+                CHECK_DATE,
+            </if>
+            <if test="checkUser != null">
+                CHECK_USER,
+            </if>
+            <if test="applyType != null">
+                APPLY_TYPE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="applyUser != null">
+                #{applyUser,jdbcType=VARCHAR},
+            </if>
+            <if test="applyUnit != null">
+                #{applyUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="applyDate != null">
+                #{applyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="applyDataName != null">
+                #{applyDataName,jdbcType=VARCHAR},
+            </if>
+            <if test="applyStatus != null">
+                #{applyStatus,jdbcType=INTEGER},
+            </if>
+            <if test="checkDate != null">
+                #{checkDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="checkUser != null">
+                #{checkUser,jdbcType=VARCHAR},
+            </if>
+            <if test="applyType != null">
+                #{applyType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--共享交换-申请详情-->
+    <select id="applyList" parameterType="com.zzsj.dm.manage.pojo.query.DataApplyQuery" resultType="com.zzsj.dm.manage.pojo.vo.DataShareApplyVo">
+        select
+        ID, APPLY_USER, APPLY_UNIT, APPLY_DATE, APPLY_DATA_NAME, APPLY_STATUS, CHECK_DATE,
+        CHECK_USER, APPLY_TYPE
+        from DATA_SHARE_APPLY
+        <where>
+          FLAG=0
+        <if test="beginDate != null and endDate != ''">
+            AND APPLY_DATE BETWEEN #{beginDate} AND #{endDate}
+        </if>
+        <if test="applyStatus != '' and applyStatus !=null"  >
+           AND  APPLY_STATUS = #{applyStatus}
+        </if>
+
+        <if test="applyDataName != '' and applyDataName !=null">
+            AND  APPLY_DATA_NAME like concat('%',#{applyDataName},'%')
+        </if>
+        </where>
+        ORDER BY CREATE_TIME DESC
+    </select>
+
+    <!--共享交换-审核-->
+    <update id="applyCheck" parameterType="com.zzsj.dm.manage.pojo.vo.DataShareApplyVo">
+        update DATA_SHARE_APPLY
+        <set>
+            <if test="applyUser != null">
+                APPLY_USER = #{applyUser,jdbcType=VARCHAR},
+            </if>
+            <if test="applyUnit != null">
+                APPLY_UNIT = #{applyUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="applyDate != null">
+                APPLY_DATE = #{applyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="applyDataName != null">
+                APPLY_DATA_NAME = #{applyDataName,jdbcType=VARCHAR},
+            </if>
+            <if test="applyStatus != null">
+                APPLY_STATUS = #{applyStatus,jdbcType=INTEGER},
+            </if>
+            <if test="checkDate != null">
+                CHECK_DATE = #{checkDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="checkUser != null">
+                CHECK_USER = #{checkUser,jdbcType=VARCHAR},
+            </if>
+            <if test="applyType != null">
+                APPLY_TYPE = #{applyType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>
+

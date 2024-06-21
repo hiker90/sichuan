@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.calculate.ProConsInvestCompMapper">
+
+    <!--全省综合交通建设投资完成情况-->
+    <select id="getProInvestData" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.entity.ProvinceTransportationConstructionInvestment">
+        SELECT ID,SRBXH SORT,ZB QUOTA,NDMB YEAR_TARGET,BYWC CURR_MONTH_FINISHED,LJWC TOTAL_FINISHED,WCBL FINISHED_PERCENT,BYHB CURR_MONTH_MOM,TBZS YOY_GROWTH_RATE,NF YEAR,YF MONTH
+        FROM T10_QSZHJTJSTZWCQKBTHCS
+        WHERE NF=#{year} AND YF=#{month}
+    </select>
+
+    <!--五区投资完成指标-->
+    <select id="getDistrInvestComp" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.entity.FiveDistrictsInvestmentCompletionIndex">
+     SELECT
+        SRBXH SORT,
+        SZ REGION,
+        HJ_NDJH YEAR_TARGET,
+        HJ_WCTZ TOTAL_FINISHED,
+        HJ_ZB FINISHED_PERCENT,
+        GSGL_NDJH HIGHWAY_YEAR_GOAL,
+        GSGL_WCTZ HIGHWAY_TOTAL_FINISHED,
+        GSGL_ZB HIGHWAY_PERCENTAGE,
+        GSGXGL_NDJH NP_HIGHWAY_YEAR_GOAL,
+        GSGXGL_WCTZ NP_HIGHWAY_TOTAL_FINISHED,
+        GSGXGL_ZB NP_HIGHWAY_PERCENT,
+        NCGL_NDJH RURAL_ROAD_YEAR_GOAL,
+        NCGL_WCTZ RURAL_ROAD_TOTAL_FINISHED,
+        NCGL_ZB RURAL_ROAD_PERCENT,
+        NHSY_NDJH INLAND_WATERWAY_YEAR_GOAL,
+        NHSY_WCTZ INLAND_WATERWAY_TOTAL_FINISHED,
+        NHSY_ZB INLAND_WATERWAY_PERCENT,
+        ZDJS_NDJH SITE_CONSTUCTION_YEAR_GOAL,
+        ZDJS_WCTZ SITE_CONSTUCTION_TOTAL_FINISHED,
+        ZD_JSZB SITE_CONSTUCTION_PERCENT,
+        YHJQTZX_NDJH CONSERVATION_YEAR_GOAL,
+        YHJQTZX_WCTZ CONSERVATION_TOTAL_FINISHED,
+        YHJQTZX_QTZX CONSERVATION_OTHERS,
+        YHJQTZX_PTGLYH CONSERVATION_ORDINARY_HIGHWAY,
+        YHJQTZX_GSGLYH CONSERVATION_HIGHWAY,
+        YHJQTZX_ZHJT CONSERVATION_INTELLIGENT_TRANSPORT,
+        YHJQTZX_ZB CONSERVATION_PERCENT,
+        NF YEAR,
+        YF MONTH
+        FROM T10_SZJTJSTZWCQKTJB
+        WHERE NF=#{year} AND YF=#{month}
+    </select>
+
+
+    <!--各市（州）公路水路建设投资完成情况-->
+    <select id="getCityConsInvestComp" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.entity.CityWayConstructionInvestmentCompletion">
+      SELECT
+      ID,
+      SRBXH SORT,
+      SZ CITY,
+      ROUND(HJ_NDJH,2) TOTAL_ANNUAL_PLAN,
+      ROUND(HJ_WCTZ,2) TOTAL_FINISHED,
+      ROUND(HJ_ZB,2) TOTAL_COMPLETION_RATE,
+      ROUND(GSGL_WCTZ,2) FINISHED_INVESTMENT_HIGHWAY,
+      ROUND(GSGXGL_WCTZ,2) FINISHED_INVESTMENT_NP_HIGHWAY,
+      ROUND(NCGL_WCTZ,2) FINISHED_INVESTMENT_RURAL_ROAD,
+      ROUND(NHSY_WCTZ,2) FINISHED_INVESTMENT_INLAND_WATERWAY,
+      ROUND(ZDJS_WCTZ,2) FINISHED_INVESTMENT_SITE_CONSTUCTION,
+      ROUND(YHJQTZX_WCTZ,2) FINISHED_INVESTMENT_CONSERVATION,
+      NF YEAR,YF MONTH,
+      rank() over(order by HJ_ZB desc nulls last) TOTAL_COMPLETION_RATE_RANKING
+      FROM T10_SZJTJSTZWCQKTJB
+     WHERE NF=#{year} AND YF=#{month}
+    </select>
+
+    <!--各市（州）公路水路建设投资完成情况-->
+    <select id="getLastMonthCityConsInvestComp" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.entity.CityWayConstructionInvestmentCompletion">
+        SELECT
+        TOTAL_CURR_MONTH_FINISHED,TOTAL_COMPLETION_RATE_RANKING
+        FROM T10_SZJTJSTZWCQKTJB
+        WHERE NF=#{year} AND YF=#{month}
+    </select>
+
+
+    <!--全省综合交通建设投资完成情况表 6-11数据-->
+    <select id="getProInvestOthersData" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.pojo.vo.ProInvestOthersVo">
+        SELECT
+        (HIGHWAY_YEAR_GOAL+NP_HIGHWAY_YEAR_GOAL+RURAL_ROAD_YEAR_GOAL+INLAND_WATERWAY_YEAR_GOAL+SITE_CONSTUCTION_YEAR_GOAL+CONSERVATION_YEAR_GOAL) ROAD_WATERWAY_YEAR_GOAL,
+        (HIGHWAY_TOTAL_FINISHED+NP_HIGHWAY_TOTAL_FINISHED+RURAL_ROAD_TOTAL_FINISHED+INLAND_WATERWAY_TOTAL_FINISHED+SITE_CONSTUCTION_TOTAL_FINISHED+CONSERVATION_TOTAL_FINISHED) ROAD_WATERWAY_TOTAL_FINISHED,
+        HIGHWAY_YEAR_GOAL,NP_HIGHWAY_YEAR_GOAL,RURAL_ROAD_YEAR_GOAL,INLAND_WATERWAY_YEAR_GOAL,SITE_CONSTUCTION_YEAR_GOAL,CONSERVATION_YEAR_GOAL,
+        HIGHWAY_TOTAL_FINISHED,NP_HIGHWAY_TOTAL_FINISHED,RURAL_ROAD_TOTAL_FINISHED,INLAND_WATERWAY_TOTAL_FINISHED,SITE_CONSTUCTION_TOTAL_FINISHED,CONSERVATION_TOTAL_FINISHED
+        FROM
+        (SELECT
+        SUM(GSGL_NDJH) HIGHWAY_YEAR_GOAL,SUM(GSGL_WCTZ) HIGHWAY_TOTAL_FINISHED,
+        SUM(GSGXGL_NDJH) NP_HIGHWAY_YEAR_GOAL,SUM(GSGXGL_WCTZ) NP_HIGHWAY_TOTAL_FINISHED,
+        SUM(NCGL_NDJH) RURAL_ROAD_YEAR_GOAL,SUM(NCGL_WCTZ) RURAL_ROAD_TOTAL_FINISHED,
+        SUM(NHSY_NDJH) INLAND_WATERWAY_YEAR_GOAL,SUM(NHSY_WCTZ) INLAND_WATERWAY_TOTAL_FINISHED,
+        SUM(ZDJS_NDJH) SITE_CONSTUCTION_YEAR_GOAL,SUM(ZDJS_WCTZ) SITE_CONSTUCTION_TOTAL_FINISHED,
+        SUM(YHJQTZX_NDJH) CONSERVATION_YEAR_GOAL,SUM(YHJQTZX_WCTZ) CONSERVATION_TOTAL_FINISHED
+        FROM T10_SZJTJSTZWCQKTJB WHERE NF=#{year} AND YF=#{month} AND SRBXH !=1
+        GROUP BY NF,YF)
+    </select>
+
+    <!--查询数据总量-->
+    <select id="getCountNum" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="java.lang.Integer">
+     SELECT COUNT(1) FROM
+     (SELECT COUNT(SRBXH) NUM FROM T10_SZJTJSTZWCQKTJB WHERE NF=#{year} AND YF=#{month} AND SRBXH !=1 GROUP BY SRBXH)
+     WHERE NUM>1
+    </select>
+</mapper>

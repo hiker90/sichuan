@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.DataCountMapper">
+    <!--查询数据统计量-->
+    <select id="getData" parameterType="com.zzsj.dm.manage.pojo.query.DataCountQuery"
+            resultType="com.zzsj.dm.manage.pojo.vo.DataCountVo">
+        SELECT C.MENU_NAME UNIT,IFNULL(A.NUM,0) NUM,IFNULL(B.TOTAL_NUM,0) TOTAL_NUM FROM
+        (SELECT MENU_NAME
+        FROM CATALOG_MENU
+        WHERE
+        FLAG=0 AND PARENT_ID=(SELECT ID FROM CATALOG_MENU WHERE PARENT_ID IS NULL)
+        ) C
+				LEFT JOIN
+				(
+        SELECT TOTAL_NUM,UNIT FROM DATA_COUNT WHERE DATE_TIME = #{endTime}
+        ) B
+				ON C.MENU_NAME=B.UNIT
+        LEFT JOIN
+        (SELECT
+        UNIT, SUM(NUM) NUM
+        FROM DATA_COUNT
+        WHERE DATE_TIME BETWEEN #{beginTime} AND #{endTime}
+        GROUP BY UNIT) A
+        ON A.UNIT=B.UNIT
+        ORDER BY B.TOTAL_NUM  DESC
+    </select>
+</mapper>

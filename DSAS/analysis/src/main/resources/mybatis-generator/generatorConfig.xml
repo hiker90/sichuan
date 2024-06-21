@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!-- 生成mysql带有分页的sql的插件  这个可以自己写，-->
+      <!--  <plugin type="generator.MysqlPaginationPlugin" />-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+     <!--   &lt;!&ndash; 自定义的注释规则，继承 DefaultCommentGenerator 重写 一些方法 &ndash;&gt;
+        <commentGenerator type="com.zzsj.analysis.base.generator.NewbatisGenerator">
+            &lt;!&ndash; 是否去除自动生成日期的注释 true：是 ： false:否 &ndash;&gt;
+            <property name="suppressDate" value="true"/>
+            &lt;!&ndash; 是否去除所有自动生成的注释 true：是 ： false:否 &ndash;&gt;
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>-->
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <!-- 去除自动生成的注释 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://10.25.171.24:13306/analysis?characterEncoding=utf-8&amp;useUnicode=true&amp;allowMultiQueries=true"
+                        userId="root" password="123654">
+        </jdbcConnection>
+        <!--生成entity类存放位置-->
+        <javaModelGenerator targetPackage="com.zzsj.analysis.manage.pojo.base" targetProject="src/main/java/">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成映射文件存放位置-->
+        <sqlMapGenerator targetPackage="mapper.base" targetProject="src/main/resources/">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--生成Dao类存放位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zzsj.analysis.manage.mapper.base"
+                             targetProject="src/main/java/">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--<table tableName="REPORT_MODEL" domainObjectName="ReportModelDo"-->
+               <!--enableCountByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" enableUpdateByExample="false"></table>
+
+        <table tableName="CUL_RULE" domainObjectName="CulRuleDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+        <table tableName="PROVINCE_TRAFFIC_INCIDENT" domainObjectName="ProvinceTrafficIncident"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+        <table tableName="PROVINCE_TRAFFIC_INCIDENT" domainObjectName="ProvinceTrafficIncident"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+        <table tableName="NATIONAL_HIGHWAY_TRAFFIC_STATISTICS" domainObjectName="NationalHighwayTrafficStatisticsDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+        <table tableName="PROVINCE_HIGHWAY_TRAFFIC_CONDITION" domainObjectName="ProvinceHighwayTrafficConditionDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+
+        <table tableName="PROVINCE_MAIN_ECNOMIC_INDICATORS" domainObjectName="ProvinceMainEcnomicIndicatorsDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+        <table tableName="PROVINCE_TRANSPORTATION_CONSTRUCTION_INVESTMENT" domainObjectName="ProvinceTransportationConstructionInvestmentDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+        <table tableName="FIVE_DISTRICTS_INVESTMENT_COMPLETION_INDEX" domainObjectName="FiveDistrictsInvestmentCompletionIndexDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+        <table tableName="CITY_WAY_CONSTRUCTION_INVESTMENT_COMPLETION" domainObjectName="CityWayConstructionInvestmentCompletionDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+
+        <table tableName="NATIONAL_HIGHWAY_WATERWAY_INVESTMENT_COMPLETION" domainObjectName="NationalHighwayWaterwayInvestmentCompletionDo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>-->
+        <table tableName="REPORT_TAB" domainObjectName="Test1Do"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"></table>
+    </context>
+</generatorConfiguration>

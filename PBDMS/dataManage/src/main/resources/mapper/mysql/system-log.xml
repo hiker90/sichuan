@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.SystemLogMapper">
+    <!--插入操作日志-->
+    <insert id="insertSysLog" parameterType="com.zzsj.dm.manage.pojo.vo.SysLogVo">
+        insert into SYSTEM_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="operate != null">
+                OPERATE,
+            </if>
+            <if test="operateUser != null">
+                OPERATE_USER,
+            </if>
+            <if test="unit != null">
+                UNIT,
+            </if>
+            <if test="ip != null">
+                IP,
+            </if>
+            <if test="queryParam != null">
+                QUERY_PARAM,
+            </if>
+            <if test="module != null">
+                MODULE,
+            </if>
+            <if test="queryMethod != null">
+                QUERY_METHOD,
+            </if>
+            <if test="browser != null">
+                BROWSER,
+            </if>
+            <if test="browserVersion != null">
+                BROWSER_VERSION,
+            </if>
+            <if test="operatingSystem != null">
+                OPERATING_SYSTEM,
+            </if>
+            <if test="returnMes != null">
+                RETURN_MES,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="operate != null">
+                #{operate,jdbcType=INTEGER},
+            </if>
+            <if test="operateUser != null">
+                #{operateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null">
+                #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">
+                #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="queryParam != null">
+                #{queryParam,jdbcType=VARCHAR},
+            </if>
+            <if test="module != null">
+                #{module,jdbcType=VARCHAR},
+            </if>
+            <if test="queryMethod != null">
+                #{queryMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="browser != null">
+                #{browser,jdbcType=VARCHAR},
+            </if>
+            <if test="browserVersion != null">
+                #{browserVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="operatingSystem != null">
+                #{operatingSystem,jdbcType=VARCHAR},
+            </if>
+            <if test="returnMes != null">
+                #{returnMes,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--查询系统操作日志-->
+    <select id="getSysLogList" parameterType="com.zzsj.dm.manage.pojo.query.SysLogQuery" resultType="com.zzsj.dm.manage.pojo.vo.SysLogVo">
+        SELECT
+        ID, OPERATE, OPERATE_USER, UNIT, IP, QUERY_PARAM, MODULE, QUERY_METHOD, BROWSER,
+        BROWSER_VERSION, OPERATING_SYSTEM, RETURN_MES, FLAG, CREATE_TIME
+        FROM SYSTEM_LOG
+        ORDER BY CREATE_TIME DESC
+    </select>
+</mapper>
+

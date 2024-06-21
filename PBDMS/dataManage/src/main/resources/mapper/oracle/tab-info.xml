@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.oracle.TabInfoMapper">
+
+    <!--获取所有表信息-->
+    <select id="getTabList" resultType="com.zzsj.dm.manage.pojo.vo.TabInfoVo">
+        select TABLE_NAME,COMMENTS
+        from  all_tab_comments
+        where owner ='SCTSP' AND TABLE_NAME NOT LIKE 'BIN$%'
+    </select>
+
+    <!--查询表中所用字段-->
+    <select id="getColList" parameterType="java.lang.String" resultType="com.zzsj.dm.manage.pojo.vo.ColInfoVo">
+        select TABLE_NAME,COLUMN_NAME,COMMENTS
+        from all_col_comments
+        where
+        <if test="_parameter != null">
+            TABLE_NAME = #{tableName}
+        </if>
+    </select>
+
+    <select id="getUseTabList" resultType="com.zzsj.dm.manage.pojo.vo.TabInfoVo">
+        select TABLE_NAME,COMMENTS
+        from  all_tab_comments
+        where owner ='SCTSP' AND TABLE_NAME LIKE 'T10_%'
+    </select>
+
+    <delete id="deleteByDate" parameterType="com.zzsj.dm.manage.pojo.query.TabDataOprQuery">
+        DELETE FROM ${tabEnName} where NF=${year}
+        <if test="month != 0">
+            and YF=${month}
+        </if>
+    </delete>
+</mapper>

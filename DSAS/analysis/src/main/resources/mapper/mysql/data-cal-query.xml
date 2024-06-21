@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.mysql.DataCalQueryMapper">
+
+    <!--五区投资完成指标-->
+    <select id="getHisDistrInvestComp" parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery"
+            resultType="com.zzsj.analysis.manage.entity.FiveDistrictsInvestmentCompletionIndex">
+      SELECT
+       SORT,
+       REGION,
+       CURR_MONTH_FINISHED,
+       TOTAL_FINISHED,
+       HIGHWAY_TOTAL_FINISHED,
+       NP_HIGHWAY_TOTAL_FINISHED,
+       RURAL_ROAD_TOTAL_FINISHED,
+       INLAND_WATERWAY_TOTAL_FINISHED,
+       SITE_CONSTUCTION_TOTAL_FINISHED,
+       CONSERVATION_TOTAL_FINISHED,
+       YEAR,
+       MONTH
+      FROM
+        FIVE_DISTRICTS_INVESTMENT_COMPLETION_INDEX
+      WHERE
+        YEAR=#{year} AND MONTH=#{month}
+    </select>
+
+    <!--L全省综合交通建设投资完成情况表-->
+    <select id="getHisProInvestOthersData"
+            resultType="com.zzsj.analysis.manage.entity.ProvinceTransportationConstructionInvestment"
+            parameterType="com.zzsj.analysis.manage.pojo.query.DateQuery">
+        SELECT SORT,CURR_MONTH_FINISHED
+        FROM PROVINCE_TRANSPORTATION_CONSTRUCTION_INVESTMENT
+        WHERE YEAR=#{year} AND MONTH=#{month}
+    </select>
+
+</mapper>
+

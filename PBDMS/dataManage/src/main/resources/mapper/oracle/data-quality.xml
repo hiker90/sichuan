@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.oracle.DataQualityMapper">
+
+    <!--查询总体数据量-->
+    <select id="getTotalNum" resultType="com.zzsj.dm.manage.pojo.vo.AcessNumVo">
+        SELECT A.DATA_NUM,C.TABLE_NUM,B.INTERFACE_NUM FROM
+            (
+            SELECT
+                 NVL(SUM( NUM_ROWS ),0) AS DATA_NUM
+            FROM
+                DBA_TABLES
+			WHERE OWNER ='SCTSP'
+            ) A
+                INNER JOIN
+            (
+             SELECT
+                (count(1)) INTERFACE_NUM
+            FROM
+                DBA_TABLES
+			WHERE OWNER ='SCTSP' AND NUM_ROWS>0 AND TABLE_NAME NOT LIKE 'T10_%'
+             ) B
+             ON 1=1
+             INNER JOIN
+             (
+            SELECT
+                COUNT( 1 ) TABLE_NUM
+            FROM
+                USER_TABLES
+             ) C
+                 ON 1=1
+    </select>
+</mapper>

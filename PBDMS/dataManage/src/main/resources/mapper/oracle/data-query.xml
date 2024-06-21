@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.oracle.DataQueryMapper">
+    <!--查询数据信息-->
+    <select id="getData" parameterType="com.zzsj.dm.manage.pojo.query.DataQueryQuery" resultType="java.util.HashMap">
+        SELECT ${colName}
+        FROM ${tabName}
+        WHERE ${queryParam}
+    </select>
+
+    <!--获取所有表信息-->
+    <select id="getTable" parameterType="com.zzsj.dm.manage.pojo.query.TabQuery" resultType="com.zzsj.dm.manage.pojo.vo.TabInfoVo">
+        select TABLE_NAME,COMMENTS
+        from  all_tab_comments
+        where owner ='SCTSP' AND TABLE_NAME NOT LIKE 'BIN$%'
+        <if test="tableQueryParam != null">
+           AND (TABLE_NAME LIKE CONCAT(CONCAT('%',#{tableQueryParam}),'%') OR COMMENTS LIKE CONCAT(CONCAT('%',#{tableQueryParam}),'%'))
+        </if>
+
+    </select>
+
+    <!--获取指定表列信息-->
+    <select id="getColumn" parameterType="java.lang.String" resultType="com.zzsj.dm.manage.pojo.vo.ColListVo">
+        SELECT
+            A.COLUMN_NAME COL_EN_NAME,
+            A.DATA_TYPE,
+            A.DATA_LENGTH LENGTH,
+            A.DATA_SCALE DECIMAL_LENGTH,
+            B.COMMENTS COL_CN_NAME
+        FROM
+            ( SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_PRECISION,DATA_LENGTH) DATA_LENGTH, DATA_SCALE FROM user_tab_columns WHERE TABLE_NAME = #{tableEnName} ORDER BY COLUMN_ID ASC ) A
+            INNER JOIN ( SELECT COLUMN_NAME, COMMENTS FROM all_col_comments WHERE TABLE_NAME = #{tableEnName} ) B ON A.COLUMN_NAME = B.COLUMN_NAME
+
+    </select>
+</mapper>
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.mysql.DataCountMysqlMapper">
+
+    <select id="getCountNum" parameterType="com.zzsj.analysis.manage.pojo.query.DataCountQuery" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM ${tableEnName} where YEAR=${year} and MONTH=${month}
+    </select>
+
+    <select id="getTabNames" parameterType="java.lang.String" resultType="com.zzsj.analysis.manage.pojo.vo.CalTabInfo">
+        SELECT TABLE_EN_NAME,TABLE_NAME FROM CHECK_RULE WHERE OUTPUT_TAB_ID=  (SELECT ID FROM CUL_RULE WHERE TABLE_EN_NAME = #{tabName})
+    </select>
+</mapper>
+

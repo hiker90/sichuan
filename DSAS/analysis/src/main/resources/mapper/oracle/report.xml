@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.oracle.ReportMapper">
+
+    <!--查询数据信息-->
+    <select id="getData" parameterType="com.zzsj.analysis.manage.pojo.query.DataQueryQuery" resultType="java.util.HashMap">
+        SELECT ${colName}
+        FROM ${tabName}
+        WHERE ${queryParam}
+        ORDER BY YEAR DESC, MONTH DESC ,SORT ASC
+    </select>
+
+    <!--查询表中所用字段-->
+    <select id="getColList" parameterType="java.lang.String" resultType="com.zzsj.analysis.manage.pojo.vo.ColInfoVo">
+        select table_name TABLE_NAME
+        ,column_name COLUMN_NAME
+        ,column_comment COMMENTS
+        from information_schema.columns
+        <where>
+            <if test="tableName != null">
+                TABLE_NAME = #{tableName}
+            </if>
+        </where>
+    </select>
+
+    <!--获取指定表列信息-->
+    <select id="getColumn" parameterType="java.lang.String" resultType="com.zzsj.analysis.manage.pojo.vo.ColListVo">
+        SELECT
+            column_name COL_EN_NAME,
+            column_type DATA_TYPE,
+            column_comment COL_CN_NAME
+        FROM
+            information_schema.COLUMNS
+        <where>
+            <if test="tableEnName != null">
+                TABLE_NAME = #{tableEnName}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.analysis.manage.mapper.mysql.ReportManageMapper">
+
+
+    <!--模版查询-->
+    <select id="getModel" parameterType="com.zzsj.analysis.manage.pojo.query.ReportQuery" resultType="com.zzsj.analysis.manage.pojo.vo.ReportModelVo">
+        SELECT
+        ID, MODEL_NAME,DRAFT_UNIT, VERSION,
+        DRAFT_USER, CREATE_TIME
+        FROM REPORT_MODEL
+        <where>
+            FLAG=0
+            <if test="modelName != null and modelName!=''">
+               AND MODEL_NAME like concat('%',#{modelName},'%')
+            </if>
+            <if test="beginDate != null and beginDate!=''">
+               AND CREATE_TIME BETWEEN #{beginDate} AND #{endDate}
+            </if>
+        </where>
+        ORDER BY CREATE_TIME DESC
+    </select>
+
+    <!--生成报告-->
+    <insert id="newReport" parameterType="com.zzsj.analysis.manage.pojo.vo.ReportTabVo">
+        insert into REPORT_TAB (ID, REPORT_NAME, DRAFT_UNIT,
+      VERSION, MODEL, CHECK_USER,
+      CHECK_DATE, CHECK_UNIT, REPORT_STATUS,
+      DRAFT_USER,MODEL_NAME,MODEL_ID,REPORT_TYPE)
+    values (#{id,jdbcType=VARCHAR}, #{reportName,jdbcType=VARCHAR}, #{draftUnit,jdbcType=VARCHAR},
+      #{version,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{checkUser,jdbcType=VARCHAR},
+      #{checkDate,jdbcType=TIMESTAMP}, #{checkUnit,jdbcType=VARCHAR}, #{reportStatus,jdbcType=INTEGER},
+      #{draftUser,jdbcType=VARCHAR},#{modelName,jdbcType=VARCHAR},#{modelId,jdbcType=VARCHAR}, #{reportType,jdbcType=INTEGER})
+    </insert>
+
+    <!--报告管理查询-->
+    <select id="getReport" parameterType="com.zzsj.analysis.manage.pojo.query.ReportQuery" resultType="com.zzsj.analysis.manage.pojo.vo.ReportTabVo">
+        SELECT
+        ID, REPORT_NAME,MODEL_NAME,MODEL, DRAFT_UNIT, VERSION,CHECK_USER, CHECK_DATE, CHECK_UNIT, REPORT_STATUS,
+        DRAFT_USER, CREATE_TIME,REPORT_TYPE
+        FROM REPORT_TAB
+        <where>
+            FLAG=0
+            <if test="modelName != null and modelName!=''">
+                AND REPORT_NAME like concat('%',#{modelName},'%')
+            </if>
+            <if test="beginDate != null and beginDate!=''">
+                AND CREATE_TIME BETWEEN #{beginDate} AND #{endDate}
+            </if>
+            <if test="checkUnit != null and checkUnit!=''">
+                AND CHECK_UNIT =  concat('%',#{checkUnit},'%')
+            </if>
+            <if test="reportStatus != null and reportStatus!=''">
+                AND REPORT_STATUS = #{reportStatus}
+            </if>
+            <if test="reportType != null and reportType!=''">
+                AND REPORT_TYPE = #{reportType}
+            </if>
+        </where>
+        ORDER BY CREATE_TIME DESC
+    </select>
+
+    <!--模版送审审核-->
+    <update id="CheckData" parameterType="com.zzsj.analysis.manage.pojo.vo.ReportTabVo">
+        update REPORT_TAB
+        <set>
+            <if test="checkUser != null">
+                CHECK_USER = #{checkUser,jdbcType=VARCHAR},
+            </if>
+            <if test="checkDate != null">
+                CHECK_DATE = #{checkDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="checkUnit != null">
+                CHECK_UNIT = #{checkUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="reportStatus != null">
+                REPORT_STATUS = #{reportStatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--查询模版-->
+    <select id="getData" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT MODEL FROM REPORT_MODEL WHERE ID=#{id}
+    </select>
+
+    <!--报告删除-->
+    <update id="deleteData" parameterType="java.lang.String">
+         update REPORT_TAB set flag=1 where id=#{id}
+    </update>
+</mapper>

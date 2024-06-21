@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzsj.dm.manage.mapper.mysql.CatalogMapper">
+    <select id="selectneedChange"  resultType="com.zzsj.dm.manage.pojo.vo.CatalogVo">
+        SELECT ID,MENU_NAME,EN_NAME,PARENT_ID,TYPE,SORT,CREATE_TIME FROM CATALOG_MENU WHERE flag=15 and en_name is null
+    </select>
+    <select id="selectParent" resultType="com.zzsj.dm.manage.pojo.vo.CatalogVo">
+        SELECT ID,MENU_NAME,EN_NAME,PARENT_ID,TYPE,SORT,CREATE_TIME FROM CATALOG_MENU WHERE TYPE=0
+    </select>
+    <!--查询数据目录-->
+    <select id="getCatalog" parameterType="com.zzsj.dm.manage.pojo.query.CatalogQuery" resultType="com.zzsj.dm.manage.pojo.vo.CatalogVo">
+        SELECT ID,MENU_NAME,EN_NAME,PARENT_ID,TYPE,SORT,CREATE_TIME
+        FROM CATALOG_MENU
+        WHERE
+        FLAG=0
+        <if test="menuName != null and menuName != ''">
+            AND MENU_NAME like concat('%',#{menuName},'%')
+        </if>
+        ORDER BY SORT ASC
+    </select>
+
+    <!--查询全部数据目录-->
+    <select id="getAllCatalog"  resultType="com.zzsj.dm.manage.pojo.vo.CatalogVo">
+        SELECT ID,MENU_NAME,EN_NAME,PARENT_ID,TYPE,SORT,CREATE_TIME
+        FROM CATALOG_MENU
+        WHERE
+        FLAG=0
+        ORDER BY SORT ASC
+    </select>
+
+    <!--查询自建表目录-->
+    <select id="getCatalogCh" resultType="com.zzsj.dm.manage.pojo.vo.CatalogVo">
+        SELECT A.* FROM
+        (
+        SELECT
+          ID,MENU_NAME,EN_NAME,PARENT_ID,TYPE,SORT,CREATE_TIME
+        FROM
+          CATALOG_MENU
+        WHERE
+          FLAG=0
+        AND
+          TYPE=0
+          union all
+          SELECT
+          ID,MENU_NAME,EN_NAME,PARENT_ID,TYPE,SORT,CREATE_TIME
+        FROM
+          CATALOG_MENU
+        WHERE
+          FLAG=0
+        AND
+          TYPE=2
+        )A
+        ORDER BY SORT ASC
+    </select>
+
+    <!--删除目录信息-->
+    <update id="deleteData" parameterType="java.lang.String">
+      UPDATE CATALOG_MENU
+      SET FLAG=1
+      WHERE ID=#{id}
+    </update>
+
+    <!--根据表名删除目录信息-->
+    <update id="deleteByEnName" parameterType="java.lang.String">
+      UPDATE CATALOG_MENU
+      SET FLAG=1
+      WHERE EN_NAME=#{tableEnName}
+    </update>
+
+    <!--插入目录信息-->
+    <insert id="insertData" parameterType="com.zzsj.dm.manage.pojo.vo.CatalogVo">
+        insert into CATALOG_MENU
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="menuName != null">
+                MENU_NAME,
+            </if>
+            <if test="enName !=null">
+                EN_NAME,
+            </if>
+            <if test="parentId != null">
+                PARENT_ID,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="sort != null">
+                SORT,
+            </if>
+            <if test="flag != null">
+                FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="menuName != null">
+                #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="enName !=null">
+                #{enName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新目录信息-->
+    <update id="updateData" parameterType="com.zzsj.dm.manage.pojo.vo.CatalogVo">
+        update CATALOG_MENU
+        <set>
+            <if test="menuName != null">
+                MENU_NAME = #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="enName !=null">
+                EN_NAME = #{enName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                PARENT_ID = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--查询目录中所有表信息-->
+    <select id="selectTab" resultType="java.lang.String">
+        SELECT EN_NAME FROM CATALOG_MENU WHERE TYPE=1 or TYPE=2
+    </select>
+</mapper>
+
